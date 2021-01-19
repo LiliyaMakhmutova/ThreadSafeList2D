@@ -1,0 +1,4 @@
+﻿  main.cpp
+C:\Users\Lily\source\repos\ThreadSafeList2D\ThreadSafeList2D\main.cpp(144,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Lily\source\repos\ThreadSafeList2D\ThreadSafeList2D\main.cpp(160,23): warning C4018: '<': signed/unsigned mismatch
+  ThreadSafeList2D.vcxproj -> C:\Users\Lily\source\repos\ThreadSafeList2D\Debug\ThreadSafeList2D.exe
