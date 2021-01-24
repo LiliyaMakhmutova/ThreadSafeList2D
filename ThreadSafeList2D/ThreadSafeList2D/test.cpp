@@ -192,6 +192,55 @@ int main() {
     ASSERT_TRUE(list.empty());
     ASSERT_TRUE(list.size() == 0);
   }
+  
+  { // time measuring tests
+    time_t timer;
+
+    timer = clock();
+    REPEAT(3) {  // simple add-remove
+      ThreadSafeList2D<int> list;
+      for (int i = 1; i <= 1000; ++i) {
+        list.push_front(i);
+      }
+      for (int i = 1; i <= 1000; ++i) {
+        list.remove(i);
+      }
+      ASSERT_TRUE(list.empty());
+      ASSERT_TRUE(list.size() == 0);
+    }
+    std::cout << "Elapsed time for simple version: "
+              << (double)(clock() - timer) / CLOCKS_PER_SEC << " seconds"
+              << std::endl;
+
+    timer = clock();
+    REPEAT(3) {  // multithreaded push-remove
+      ThreadSafeList2D<int> list;
+      std::vector<std::thread> threads;
+      for (int i = 1; i <= 1000; ++i) {
+        threads.push_back(
+            std::thread(&ThreadSafeList2D<int>::push_front, &list, i));
+      }
+      for (int i = 0; i < 1000; i++) {
+        threads.at(i).join();
+      }
+
+      threads.clear();
+
+      for (int i = 1; i <= 1000; ++i) {
+        threads.push_back(
+            std::thread(&ThreadSafeList2D<int>::remove, &list, i));
+      }
+      for (int i = 0; i < 1000; i++) {
+        threads.at(i).join();
+      }
+
+      ASSERT_TRUE(list.empty());
+      ASSERT_TRUE(list.size() == 0);
+    }
+    std::cout << "Elapsed time for multithreaded version: "
+              << (double)(clock() - timer) / CLOCKS_PER_SEC << " seconds"
+              << std::endl;    
+  }
 
   return 0;
 }
